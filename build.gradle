@@ -9,104 +9,13 @@ buildscript {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:latest.release"
         classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.4.+"
-        classpath 'co.riiid:gradle-github-plugin:0.4.+'
-        classpath 'com.selesse:gradle-git-changelog:0.2.+'
+        classpath "co.riiid:gradle-github-plugin:0.4.+"
+        classpath "com.selesse:gradle-git-changelog:0.2.+"
+        classpath "gradle.plugin.com.limark.open.gradle.plugins:GitFlowSemVerPlugin:0.3.1"
     }
 }
-apply plugin: 'net.minecraftforge.gradle'
-// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+
 apply plugin: 'co.riiid.gradle'
 apply plugin: 'eclipse'
 
-version = '1.0'
-group = "ca.fireball1725.${project_name}"
-archivesBaseName = "${project_name}"
-
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
-
-minecraft {
-    mappings channel: "${mcp_channel}", version: "${mcp_version}"
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-    
-    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-
-    runs {
-        client {
-            workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'info'
-
-            mods {
-                hue {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        server {
-            workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'info'
-
-            mods {
-                hue {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        data {
-            workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'info'
-
-            args '--mod', project_name, '--all', '--output', file('src/generated/resources/')
-
-            mods {
-                hue {
-                    source sourceSets.main
-                }
-            }
-        }
-    }
-}
-
 fileTree('gradle/scripts').include ('*.gradle').collect().sort().each { apply from: it }
-
-dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-
-    mods fg.deobf("com.fireball1725.devworld2:DevWorld2:1.14.4-b8-client")
-    mods fg.deobf("mezz.jei:jei-1.14.4:6.0.0.13")
-    mods fg.deobf('mcjtylib:mcjtylib-1.14:3.5.7:alpha')
-    mods fg.deobf('rftools-base:rftoolsbase-1.14:0.0.4:alpha')
-    mods fg.deobf('rftools-power:rftoolspower-1.14:1.2.4:alpha')
-}
-
-// Example for how to get properties into the manifest for reading by the runtime..
-jar {
-    manifest {
-        attributes([
-            "Specification-Title": "Hue",
-            "Specification-Vendor": "FireBall1725",
-            "Specification-Version": "1", // We are version 1 of ourselves
-            "Implementation-Title":  "${project_name}",
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"FireBall1725",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
-}
-
