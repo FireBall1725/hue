@@ -36,9 +36,6 @@ repositories {
     }
 }
 
-dependencies {
-}
-
 configurations {
     mods
 }
@@ -55,4 +52,14 @@ task deinstallMods(type: Delete) {
 
 project.afterEvaluate {
     project.tasks['prepareRuns'].dependsOn(project.tasks['installMods'])
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    mods fg.deobf("com.fireball1725.devworld2:DevWorld2:1.14.4-b8-client")
+    mods fg.deobf("mezz.jei:jei-1.14.4:6.0.0.13")
+    mods fg.deobf('mcjtylib:mcjtylib-1.14:3.5.7:alpha')
+    mods fg.deobf('rftools-base:rftoolsbase-1.14:0.0.4:alpha')
+    mods fg.deobf('rftools-power:rftoolspower-1.14:1.2.4:alpha')
 }
